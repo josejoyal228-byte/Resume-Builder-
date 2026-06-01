@@ -1,0 +1,1915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ResuméForge — Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════
+   DESIGN SYSTEM — Dark Luxury / Forge Aesthetic
+═══════════════════════════════════════════════════════ */
+:root {
+  --void: #06060a;
+  --deep: #0d0d14;
+  --surface: #12121c;
+  --raised: #1a1a28;
+  --border: rgba(255,255,255,0.07);
+  --border-glow: rgba(201,163,76,0.3);
+  --gold: #c9a34c;
+  --gold-bright: #f0c060;
+  --gold-dim: rgba(201,163,76,0.15);
+  --silver: #a8b4c4;
+  --text: #e8e4dc;
+  --muted: #6a6878;
+  --danger: #e05454;
+  --success: #4caf7d;
+  --ink: #0a0a0f;
+  --paper: #faf8f4;
+  --paper-warm: #f5f0e8;
+  --radius: 8px;
+  --transition: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Syne', sans-serif;
+  background: var(--void);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ═══════════════════════════════════════════════════════
+   PARTICLE CANVAS BACKGROUND
+═══════════════════════════════════════════════════════ */
+#bgCanvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* ═══════════════════════════════════════════════════════
+   AUTH SCREEN
+═══════════════════════════════════════════════════════ */
+#authScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse 80% 80% at 50% 0%, rgba(201,163,76,0.08) 0%, transparent 70%), var(--void);
+}
+
+.auth-container {
+  width: 420px;
+  max-width: 95vw;
+  animation: authReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes authReveal {
+  from { opacity: 0; transform: translateY(40px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.auth-logo {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.auth-logo-mark {
+  display: inline-flex;
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--gold) 0%, #8a6520 100%);
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 0 40px rgba(201,163,76,0.4), 0 0 80px rgba(201,163,76,0.15);
+  animation: logoFloat 3s ease-in-out infinite;
+}
+
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0); box-shadow: 0 0 40px rgba(201,163,76,0.4), 0 0 80px rgba(201,163,76,0.15); }
+  50% { transform: translateY(-6px); box-shadow: 0 12px 50px rgba(201,163,76,0.5), 0 0 100px rgba(201,163,76,0.2); }
+}
+
+.auth-logo h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--text);
+}
+
+.auth-logo h1 span { color: var(--gold); }
+.auth-logo p { font-size: 0.78rem; color: var(--muted); margin-top: 0.3rem; letter-spacing: 0.12em; text-transform: uppercase; }
+
+.auth-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+}
+
+.auth-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(201,163,76,0.05) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.auth-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 1.8rem;
+  background: var(--raised);
+  border-radius: var(--radius);
+  padding: 3px;
+}
+
+.auth-tab {
+  flex: 1;
+  padding: 0.55rem;
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-family: 'Syne', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all var(--transition);
+  letter-spacing: 0.04em;
+}
+
+.auth-tab.active {
+  background: var(--gold);
+  color: var(--ink);
+  font-weight: 600;
+  box-shadow: 0 2px 12px rgba(201,163,76,0.35);
+}
+
+.auth-field {
+  margin-bottom: 1rem;
+}
+
+.auth-field label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+}
+
+.auth-field input {
+  width: 100%;
+  background: var(--raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.7rem 1rem;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.88rem;
+  color: var(--text);
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.auth-field input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(201,163,76,0.12);
+}
+
+.auth-field input::placeholder { color: var(--muted); }
+
+.btn-primary {
+  width: 100%;
+  background: linear-gradient(135deg, var(--gold) 0%, #a07828 100%);
+  color: var(--ink);
+  border: none;
+  padding: 0.8rem;
+  border-radius: var(--radius);
+  font-family: 'Syne', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition);
+  margin-top: 0.5rem;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 60%);
+  transform: translateX(-100%);
+  transition: transform 0.4s ease;
+}
+
+.btn-primary:hover::before { transform: translateX(0); }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(201,163,76,0.4); }
+.btn-primary:active { transform: translateY(0); }
+
+.auth-error {
+  color: var(--danger);
+  font-size: 0.78rem;
+  margin-top: 0.5rem;
+  min-height: 1.2em;
+  display: block;
+}
+
+.auth-divider {
+  text-align: center;
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin: 1.2rem 0 0;
+  letter-spacing: 0.08em;
+}
+
+/* ═══════════════════════════════════════════════════════
+   MAIN APP
+═══════════════════════════════════════════════════════ */
+#app {
+  display: none;
+  flex-direction: column;
+  height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+#app.visible { display: flex; }
+
+/* HEADER */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1.8rem;
+  background: rgba(13,13,20,0.9);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  position: relative;
+  z-index: 100;
+  flex-shrink: 0;
+}
+
+.app-header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.4;
+}
+
+.header-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.header-brand .logo-icon {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--gold), #8a6520);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  box-shadow: 0 0 12px rgba(201,163,76,0.3);
+}
+
+.header-brand span { color: var(--gold); }
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--raised);
+  border: 1px solid var(--border);
+  border-radius: 40px;
+  padding: 0.35rem 0.8rem 0.35rem 0.4rem;
+  font-size: 0.8rem;
+  color: var(--silver);
+}
+
+.user-avatar {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), #8a6520);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; font-weight: 700; color: var(--ink);
+}
+
+.btn-logout {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 0.35rem 0.8rem;
+  border-radius: 6px;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.76rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.04em;
+}
+.btn-logout:hover { border-color: var(--danger); color: var(--danger); }
+
+/* APP BODY */
+.app-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════════════════════ */
+.sidebar {
+  width: 260px;
+  background: var(--deep);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.sidebar-header {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar-header h2 {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.btn-new {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: var(--gold);
+  color: var(--ink);
+  border: none;
+  padding: 0.38rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Syne', sans-serif;
+  transition: all var(--transition);
+  letter-spacing: 0.04em;
+}
+.btn-new:hover {
+  background: var(--gold-bright);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(201,163,76,0.35);
+}
+
+.resume-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.6rem;
+}
+
+.resume-list::-webkit-scrollbar { width: 4px; }
+.resume-list::-webkit-scrollbar-track { background: transparent; }
+.resume-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+.resume-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.45rem;
+  cursor: pointer;
+  transition: all var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.resume-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--gold);
+  transform: scaleY(0);
+  transition: transform var(--transition);
+  transform-origin: center;
+}
+
+.resume-card:hover { border-color: rgba(201,163,76,0.25); transform: translateX(2px); }
+.resume-card:hover::before { transform: scaleY(1); }
+.resume-card.active { border-color: rgba(201,163,76,0.4); background: rgba(201,163,76,0.06); }
+.resume-card.active::before { transform: scaleY(1); }
+
+.resume-card-name {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--text);
+  padding-right: 1.4rem;
+}
+
+.resume-card-meta {
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 0.25rem;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.resume-card-del {
+  position: absolute;
+  top: 0.6rem; right: 0.6rem;
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 0.2rem;
+  border-radius: 4px;
+  transition: all 0.15s;
+  line-height: 1;
+}
+.resume-card-del:hover { color: var(--danger); background: rgba(224,84,84,0.1); }
+
+.sidebar-empty {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.7;
+}
+
+.sidebar-empty .empty-icon { font-size: 2rem; margin-bottom: 0.8rem; opacity: 0.4; }
+
+/* STATS */
+.sidebar-stats {
+  padding: 0.8rem 1rem;
+  border-top: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.stat-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-top: 0.2rem;
+}
+
+/* ═══════════════════════════════════════════════════════
+   FORM PANEL
+═══════════════════════════════════════════════════════ */
+.form-panel {
+  width: 400px;
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--deep);
+}
+
+.form-panel::-webkit-scrollbar { width: 4px; }
+.form-panel::-webkit-scrollbar-track { background: transparent; }
+.form-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+.no-select {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--muted);
+  text-align: center;
+  gap: 0.8rem;
+  padding: 2rem;
+}
+
+.no-select .no-sel-icon {
+  font-size: 3rem;
+  opacity: 0.2;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.2; }
+  50% { transform: scale(1.05); opacity: 0.35; }
+}
+
+.no-select h3 { font-size: 1rem; font-weight: 600; color: var(--silver); }
+.no-select p { font-size: 0.8rem; line-height: 1.6; max-width: 200px; }
+
+.form-inner { padding: 1.5rem; flex: 1; }
+
+.form-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.form-subtitle {
+  font-size: 0.72rem;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 1.4rem;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.section-label {
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--gold);
+  font-weight: 700;
+  margin: 1.6rem 0 0.7rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(201,163,76,0.3), transparent);
+}
+
+label {
+  font-size: 0.72rem;
+  color: var(--muted);
+  display: block;
+  margin-bottom: 0.3rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 0.6rem 0.85rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: 'Syne', sans-serif;
+  font-size: 0.85rem;
+  color: var(--text);
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+  margin-bottom: 0.7rem;
+}
+
+input:focus, textarea:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(201,163,76,0.1), 0 0 20px rgba(201,163,76,0.05);
+  background: var(--raised);
+}
+
+input::placeholder, textarea::placeholder { color: var(--muted); font-size: 0.83rem; }
+textarea { resize: vertical; min-height: 72px; }
+
+.field-row { display: flex; gap: 0.6rem; }
+.field-row > div { flex: 1; }
+
+/* Dynamic items */
+.dyn-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.85rem;
+  margin-bottom: 0.6rem;
+  position: relative;
+  transition: border-color var(--transition);
+  animation: dynIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes dynIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.dyn-item:hover { border-color: rgba(201,163,76,0.2); }
+
+.dyn-item-del {
+  position: absolute;
+  top: 0.6rem; right: 0.6rem;
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.78rem;
+  padding: 0.2rem 0.35rem;
+  border-radius: 4px;
+  transition: all 0.15s;
+}
+.dyn-item-del:hover { color: var(--danger); background: rgba(224,84,84,0.1); }
+
+.btn-add {
+  width: 100%;
+  background: none;
+  border: 1px dashed rgba(201,163,76,0.3);
+  color: rgba(201,163,76,0.7);
+  padding: 0.5rem;
+  border-radius: var(--radius);
+  font-family: 'Syne', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+  letter-spacing: 0.04em;
+  margin-bottom: 0.4rem;
+}
+.btn-add:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: var(--gold-dim);
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1.4rem;
+}
+
+.btn-save {
+  flex: 1;
+  background: linear-gradient(135deg, var(--gold) 0%, #a07828 100%);
+  color: var(--ink);
+  border: none;
+  padding: 0.75rem;
+  border-radius: var(--radius);
+  font-family: 'Syne', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition);
+}
+
+.btn-save:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(201,163,76,0.4);
+}
+
+.btn-save:active { transform: translateY(0); }
+
+.btn-save::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+  transform: translateX(-101%);
+  transition: transform 0.4s ease;
+}
+
+.btn-save:hover::after { transform: translateX(0); }
+
+.btn-ai {
+  background: var(--surface);
+  border: 1px solid rgba(201,163,76,0.25);
+  color: var(--gold);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  font-family: 'Syne', sans-serif;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+}
+
+.btn-ai:hover {
+  background: var(--gold-dim);
+  border-color: var(--gold);
+  transform: translateY(-1px);
+}
+
+/* AI loading spinner */
+.ai-spinner {
+  width: 14px; height: 14px;
+  border: 2px solid rgba(201,163,76,0.3);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: none;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.ai-thinking .ai-spinner { display: block; }
+.ai-thinking .ai-icon { display: none; }
+
+/* Score badge */
+.score-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--raised);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 0.2rem 0.6rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--silver);
+  margin-left: auto;
+}
+
+.score-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--success);
+}
+
+/* ═══════════════════════════════════════════════════════
+   PREVIEW PANEL
+═══════════════════════════════════════════════════════ */
+.preview-panel {
+  flex: 1;
+  overflow-y: auto;
+  background: #c8c4bc;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.preview-toolbar {
+  width: 700px;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.preview-toolbar .toolbar-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--void);
+  font-weight: 600;
+  opacity: 0.5;
+  flex: 1;
+}
+
+.btn-print {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--void);
+  color: var(--text);
+  border: none;
+  padding: 0.45rem 1rem;
+  border-radius: 6px;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.04em;
+}
+
+.btn-print:hover { background: #1a1a2e; transform: translateY(-1px); }
+
+/* RESUME SHEET */
+.resume-sheet {
+  background: white;
+  width: 700px;
+  max-width: 100%;
+  min-height: 900px;
+  box-shadow: 0 8px 48px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.2);
+  padding: 3rem 3.5rem;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Syne', sans-serif;
+  color: #1a1a28;
+}
+
+.resume-sheet::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #c9a34c, #f0c060, #c9a34c);
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { background-position: 0% 0%; }
+  50% { background-position: 100% 0%; }
+}
+
+.resume-sheet .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 800px;
+  gap: 1rem;
+  color: #aaa;
+  text-align: center;
+}
+
+.empty-state .empty-icon { font-size: 3rem; opacity: 0.25; animation: pulse 2s ease-in-out infinite; }
+
+/* Resume content */
+.r-header { margin-bottom: 1.5rem; }
+
+.r-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #0d0d1a;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+
+.r-title {
+  font-size: 0.95rem;
+  color: #c9a34c;
+  font-weight: 500;
+  margin-top: 0.3rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+}
+
+.r-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  margin-top: 0.9rem;
+  font-size: 0.78rem;
+  color: #666;
+  border-bottom: 1.5px solid #e8e4dc;
+  padding-bottom: 1.2rem;
+  margin-bottom: 1.4rem;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.r-contact span {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.r-contact-dot {
+  width: 3px; height: 3px;
+  background: #c9a34c;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.r-section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0d0d1a;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.75rem;
+  margin-top: 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.r-section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, #c9a34c, #e8e4dc);
+}
+
+.r-summary {
+  font-size: 0.87rem;
+  line-height: 1.75;
+  color: #444;
+}
+
+.r-exp-item, .r-edu-item {
+  margin-bottom: 1.2rem;
+}
+
+.r-exp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.r-exp-role {
+  font-weight: 700;
+  font-size: 0.94rem;
+  color: #1a1a28;
+}
+
+.r-exp-date {
+  font-size: 0.72rem;
+  color: #999;
+  white-space: nowrap;
+  font-family: 'JetBrains Mono', monospace;
+  margin-top: 0.1rem;
+}
+
+.r-exp-company {
+  font-size: 0.82rem;
+  color: #c9a34c;
+  margin: 0.15rem 0 0.45rem;
+  font-weight: 500;
+}
+
+.r-exp-desc {
+  font-size: 0.83rem;
+  color: #555;
+  line-height: 1.7;
+}
+
+.r-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.r-skill-tag {
+  background: #f5f0e8;
+  border: 1px solid #e8e4dc;
+  border-radius: 4px;
+  padding: 0.25rem 0.7rem;
+  font-size: 0.75rem;
+  color: #444;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════════════ */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: var(--raised);
+  color: var(--text);
+  padding: 0.8rem 1.3rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  border-left: 3px solid var(--gold);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  z-index: 9999;
+  animation: toastIn 0.35s cubic-bezier(0.16, 1, 0.3, 1), toastOut 0.3s ease 1.9s forwards;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  backdrop-filter: blur(10px);
+  letter-spacing: 0.02em;
+}
+
+.toast.error { border-left-color: var(--danger); }
+.toast.success { border-left-color: var(--success); }
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(20px) scale(0.95); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes toastOut {
+  to { opacity: 0; transform: translateX(20px); }
+}
+
+/* ═══════════════════════════════════════════════════════
+   AI PANEL
+═══════════════════════════════════════════════════════ */
+.ai-suggestion {
+  background: var(--surface);
+  border: 1px solid rgba(201,163,76,0.2);
+  border-radius: var(--radius);
+  padding: 0.85rem;
+  margin-top: 0.7rem;
+  font-size: 0.82rem;
+  color: var(--silver);
+  line-height: 1.6;
+  position: relative;
+  overflow: hidden;
+  animation: dynIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ai-suggestion::before {
+  content: '✦ AI';
+  position: absolute;
+  top: 0.5rem; right: 0.6rem;
+  font-size: 0.6rem;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  font-weight: 700;
+}
+
+/* ═══════════════════════════════════════════════════════
+   PRINT STYLES
+═══════════════════════════════════════════════════════ */
+@media print {
+  body * { visibility: hidden; }
+  .resume-sheet, .resume-sheet * { visibility: visible; }
+  .resume-sheet {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    box-shadow: none;
+    padding: 2cm;
+  }
+  .resume-sheet::before { display: none; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   REVEAL ANIMATION
+═══════════════════════════════════════════════════════ */
+.stagger > * {
+  animation: staggerIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.stagger > *:nth-child(1) { animation-delay: 0s; }
+.stagger > *:nth-child(2) { animation-delay: 0.05s; }
+.stagger > *:nth-child(3) { animation-delay: 0.1s; }
+.stagger > *:nth-child(4) { animation-delay: 0.15s; }
+.stagger > *:nth-child(5) { animation-delay: 0.2s; }
+
+@keyframes staggerIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Glow on active card */
+@keyframes cardGlow {
+  0%, 100% { box-shadow: 0 0 12px rgba(201,163,76,0.1); }
+  50% { box-shadow: 0 0 24px rgba(201,163,76,0.25); }
+}
+
+.resume-card.active { animation: cardGlow 2.5s ease-in-out infinite; }
+
+/* Typing cursor */
+.typing-cursor::after {
+  content: '|';
+  animation: blink 1s step-end infinite;
+  color: var(--gold);
+}
+
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+/* Ripple effect on buttons */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  transform: scale(0);
+  animation: rippleAnim 0.6s linear;
+  pointer-events: none;
+}
+
+@keyframes rippleAnim {
+  to { transform: scale(4); opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- PARTICLE BACKGROUND -->
+<canvas id="bgCanvas"></canvas>
+
+<!-- ═══════════════════════════════════ AUTH SCREEN ═══════════════════════════════════ -->
+<div id="authScreen">
+  <div class="auth-container">
+    <div class="auth-logo">
+      <div class="auth-logo-mark">⚡</div>
+      <h1>Resumé<span>Forge</span></h1>
+      <p>Professional · Crafted · Elevated</p>
+    </div>
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Sign In</button>
+        <button class="auth-tab" id="tabRegister" onclick="switchTab('register')">Create Account</button>
+      </div>
+
+      <!-- LOGIN -->
+      <div id="loginForm">
+        <div class="auth-field">
+          <label>Email Address</label>
+          <input type="email" id="l_email" placeholder="you@example.com" autocomplete="email">
+        </div>
+        <div class="auth-field">
+          <label>Password</label>
+          <input type="password" id="l_pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(e.key==='Enter')doLogin()">
+        </div>
+        <span class="auth-error" id="loginErr"></span>
+        <button class="btn-primary" onclick="doLogin()">Sign In →</button>
+        <div class="auth-divider">Demo: test@demo.com / demo1234</div>
+      </div>
+
+      <!-- REGISTER -->
+      <div id="registerForm" style="display:none">
+        <div class="auth-field">
+          <label>Full Name</label>
+          <input type="text" id="r_name" placeholder="Jane Doe" autocomplete="name">
+        </div>
+        <div class="auth-field">
+          <label>Email Address</label>
+          <input type="email" id="r_email" placeholder="you@example.com" autocomplete="email">
+        </div>
+        <div class="auth-field">
+          <label>Password</label>
+          <input type="password" id="r_pass" placeholder="Min 6 characters" autocomplete="new-password">
+        </div>
+        <div class="auth-field">
+          <label>Confirm Password</label>
+          <input type="password" id="r_pass2" placeholder="Repeat password" autocomplete="new-password">
+        </div>
+        <span class="auth-error" id="registerErr"></span>
+        <button class="btn-primary" onclick="doRegister()">Create Account →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ MAIN APP ═══════════════════════════════════ -->
+<div id="app">
+  <header class="app-header">
+    <div class="header-brand">
+      <div class="logo-icon">⚡</div>
+      Resumé<span>Forge</span>
+    </div>
+    <div class="header-right">
+      <div class="user-pill">
+        <div class="user-avatar" id="userAvatar">J</div>
+        <span id="userLabel">User</span>
+      </div>
+      <button class="btn-logout" onclick="doLogout()">Sign Out</button>
+    </div>
+  </header>
+
+  <div class="app-body">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <h2>My Resumes</h2>
+        <button class="btn-new" onclick="newResume()">+ New</button>
+      </div>
+      <div class="resume-list" id="resumeList"></div>
+      <div class="sidebar-stats">
+        <div class="stat-box">
+          <div class="stat-num" id="statCount">0</div>
+          <div class="stat-label">Resumes</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" id="statEdits">0</div>
+          <div class="stat-label">Edits</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM PANEL -->
+    <div class="form-panel" id="formPanel">
+      <div class="no-select" id="noSelectMsg">
+        <div class="no-sel-icon">📄</div>
+        <h3>No Resume Selected</h3>
+        <p>Click <strong>+ New</strong> to craft your first resume, or select an existing one.</p>
+      </div>
+
+      <div id="formContent" style="display:none">
+        <div class="form-inner">
+          <div class="form-title">
+            <span id="formTitle">New Resume</span>
+            <div class="score-badge">
+              <div class="score-dot" id="scoreDot"></div>
+              <span id="scoreLabel">—</span>
+            </div>
+          </div>
+          <div class="form-subtitle" id="formSubtitle">Fill in your details below</div>
+
+          <div class="section-label">Personal Info</div>
+          <label>Full Name</label>
+          <input type="text" id="f_name" placeholder="Jane Doe">
+          <label>Professional Title</label>
+          <input type="text" id="f_title" placeholder="Senior Product Designer">
+          <div class="field-row">
+            <div><label>Email</label><input type="email" id="f_email" placeholder="jane@example.com"></div>
+            <div><label>Phone</label><input type="tel" id="f_phone" placeholder="+91 98765 43210"></div>
+          </div>
+          <div class="field-row">
+            <div><label>Location</label><input type="text" id="f_location" placeholder="Chennai, India"></div>
+            <div><label>LinkedIn / Website</label><input type="text" id="f_link" placeholder="linkedin.com/in/jane"></div>
+          </div>
+
+          <div class="section-label">Summary</div>
+          <label>Professional Summary</label>
+          <textarea id="f_summary" placeholder="Brief overview of your expertise and career goals..."></textarea>
+          <button class="btn-ai" id="aiSummaryBtn" onclick="aiSuggestSummary()">
+            <span class="ai-icon">✦</span>
+            <div class="ai-spinner"></div>
+            AI Enhance
+          </button>
+          <div id="aiSuggestionBox"></div>
+
+          <div class="section-label">Experience</div>
+          <div id="expList"></div>
+          <button class="btn-add" onclick="addExp()">+ Add Experience</button>
+
+          <div class="section-label">Education</div>
+          <div id="eduList"></div>
+          <button class="btn-add" onclick="addEdu()">+ Add Education</button>
+
+          <div class="section-label">Skills</div>
+          <label>Skills (comma-separated)</label>
+          <textarea id="f_skills" placeholder="Figma, React, TypeScript, Leadership, Agile..." style="min-height:55px"></textarea>
+
+          <div class="form-actions">
+            <button class="btn-save" onclick="saveResume()">💾 Save Resume</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PREVIEW PANEL -->
+    <div class="preview-panel">
+      <div class="preview-toolbar">
+        <span class="toolbar-label">Live Preview</span>
+        <button class="btn-print" onclick="window.print()">🖨 Print / Export PDF</button>
+      </div>
+      <div class="resume-sheet" id="previewSheet">
+        <div class="empty-state">
+          <div class="empty-icon">📋</div>
+          <div style="font-weight:600;font-size:1rem;color:#aaa">Resume Preview</div>
+          <div style="font-size:0.83rem;color:#bbb;margin-top:0.4rem">Fill in the form and save to see your resume here.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ SCRIPTS ═══════════════════════════════════ -->
+<script>
+/* ─────────────── PARTICLE SYSTEM ─────────────── */
+(function() {
+  const canvas = document.getElementById('bgCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [], mouse = { x: -999, y: -999 };
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function createParticle() {
+    return {
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 1.5 + 0.3,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      alpha: Math.random() * 0.5 + 0.1,
+      gold: Math.random() > 0.85
+    };
+  }
+
+  function init() {
+    resize();
+    particles = Array.from({ length: 120 }, createParticle);
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < 0) p.x = W;
+      if (p.x > W) p.x = 0;
+      if (p.y < 0) p.y = H;
+      if (p.y > H) p.y = 0;
+
+      const dx = p.x - mouse.x, dy = p.y - mouse.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 100) {
+        p.x += dx / dist * 0.5;
+        p.y += dy / dist * 0.5;
+      }
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.gold
+        ? `rgba(201,163,76,${p.alpha})`
+        : `rgba(168,180,196,${p.alpha * 0.5})`;
+      ctx.fill();
+    });
+
+    // Connect nearby particles
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const d = Math.sqrt(dx*dx + dy*dy);
+        if (d < 80) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(201,163,76,${0.08 * (1 - d/80)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+  window.addEventListener('resize', resize);
+  init();
+  draw();
+})();
+
+/* ─────────────── RIPPLE EFFECT ─────────────── */
+document.addEventListener('click', e => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  const ripple = document.createElement('span');
+  ripple.className = 'ripple';
+  const rect = btn.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height);
+  ripple.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px`;
+  btn.style.position = 'relative';
+  btn.style.overflow = 'hidden';
+  btn.appendChild(ripple);
+  setTimeout(() => ripple.remove(), 600);
+});
+
+/* ─────────────── BACKEND (localStorage) ─────────────── */
+const DB = {
+  users() { return JSON.parse(localStorage.getItem('rf_users') || '[]'); },
+  saveUsers(u) { localStorage.setItem('rf_users', JSON.stringify(u)); },
+  session() { return JSON.parse(sessionStorage.getItem('rf_session') || 'null'); },
+  setSession(u) { sessionStorage.setItem('rf_session', JSON.stringify(u)); },
+  clearSession() { sessionStorage.removeItem('rf_session'); },
+  resumes(uid) { return JSON.parse(localStorage.getItem(`rf_resumes_${uid}`) || '[]'); },
+  saveResumes(uid, r) { localStorage.setItem(`rf_resumes_${uid}`, JSON.stringify(r)); },
+  stats(uid) { return JSON.parse(localStorage.getItem(`rf_stats_${uid}`) || '{"edits":0}'); },
+  incrEdits(uid) {
+    const s = DB.stats(uid);
+    s.edits++;
+    localStorage.setItem(`rf_stats_${uid}`, JSON.stringify(s));
+    return s;
+  },
+  seed() {
+    // Seed a demo account
+    const users = DB.users();
+    if (!users.find(u => u.email === 'test@demo.com')) {
+      users.push({ id: 'demo', name: 'Demo User', email: 'test@demo.com', pass: 'demo1234', createdAt: Date.now() });
+      DB.saveUsers(users);
+    }
+  }
+};
+
+DB.seed();
+
+/* ─────────────── AUTH ─────────────── */
+let currentUser = null;
+
+function switchTab(tab) {
+  document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('registerForm').style.display = tab === 'register' ? 'block' : 'none';
+  document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
+  document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
+  document.getElementById('loginErr').textContent = '';
+  document.getElementById('registerErr').textContent = '';
+}
+
+function hashPass(p) {
+  // Simple obfuscation (not real crypto — demo only)
+  return btoa(p + ':rf_salt_2025');
+}
+
+function doLogin() {
+  const email = document.getElementById('l_email').value.trim().toLowerCase();
+  const pass = document.getElementById('l_pass').value;
+  const err = document.getElementById('loginErr');
+  if (!email || !pass) { err.textContent = 'Please fill in all fields.'; return; }
+  const users = DB.users();
+  const user = users.find(u => u.email === email);
+  if (!user || (user.pass !== pass && user.pass !== hashPass(pass))) {
+    err.textContent = 'Invalid email or password.';
+    shakeEl(err);
+    return;
+  }
+  err.textContent = '';
+  loginSuccess(user);
+}
+
+function doRegister() {
+  const name = document.getElementById('r_name').value.trim();
+  const email = document.getElementById('r_email').value.trim().toLowerCase();
+  const pass = document.getElementById('r_pass').value;
+  const pass2 = document.getElementById('r_pass2').value;
+  const err = document.getElementById('registerErr');
+
+  if (!name || !email || !pass || !pass2) { err.textContent = 'Please fill in all fields.'; return; }
+  if (pass.length < 6) { err.textContent = 'Password must be at least 6 characters.'; return; }
+  if (pass !== pass2) { err.textContent = 'Passwords do not match.'; return; }
+
+  const users = DB.users();
+  if (users.find(u => u.email === email)) { err.textContent = 'An account with this email already exists.'; return; }
+
+  const newUser = {
+    id: 'u_' + Date.now().toString(36),
+    name, email,
+    pass: hashPass(pass),
+    createdAt: Date.now()
+  };
+  users.push(newUser);
+  DB.saveUsers(users);
+  err.textContent = '';
+  loginSuccess(newUser);
+}
+
+function loginSuccess(user) {
+  currentUser = user;
+  DB.setSession(user);
+  document.getElementById('userLabel').textContent = user.name;
+  document.getElementById('userAvatar').textContent = user.name[0].toUpperCase();
+
+  // Animate auth screen out
+  const auth = document.getElementById('authScreen');
+  auth.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+  auth.style.opacity = '0';
+  auth.style.transform = 'scale(1.04)';
+  setTimeout(() => {
+    auth.style.display = 'none';
+    document.getElementById('app').classList.add('visible');
+    initApp();
+  }, 500);
+}
+
+function doLogout() {
+  DB.clearSession();
+  currentUser = null;
+  document.getElementById('app').classList.remove('visible');
+  const auth = document.getElementById('authScreen');
+  auth.style.display = 'flex';
+  auth.style.opacity = '0';
+  auth.style.transform = 'scale(0.96)';
+  requestAnimationFrame(() => {
+    auth.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+    auth.style.opacity = '1';
+    auth.style.transform = 'scale(1)';
+  });
+  resumes = []; currentId = null;
+}
+
+function shakeEl(el) {
+  el.style.animation = 'none';
+  requestAnimationFrame(() => {
+    el.style.animation = 'shake 0.4s ease';
+  });
+}
+
+// Check existing session
+window.addEventListener('load', () => {
+  const session = DB.session();
+  if (session) loginSuccess(session);
+});
+
+/* ─────────────── APP STATE ─────────────── */
+let resumes = [];
+let currentId = null;
+let expCount = 0, eduCount = 0;
+
+function initApp() {
+  resumes = DB.resumes(currentUser.id);
+  updateStats();
+  renderSidebar();
+  if (resumes.length) selectResume(resumes[0].id);
+}
+
+function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+
+/* ─────────────── SIDEBAR ─────────────── */
+function renderSidebar() {
+  const list = document.getElementById('resumeList');
+  if (!resumes.length) {
+    list.innerHTML = '<div class="sidebar-empty"><div class="empty-icon">📂</div>No resumes yet.<br>Click <strong>+ New</strong> to begin.</div>';
+    return;
+  }
+  list.innerHTML = resumes.map((r, i) => `
+    <div class="resume-card ${r.id === currentId ? 'active' : ''}"
+         onclick="selectResume('${r.id}')"
+         style="animation: staggerIn 0.4s cubic-bezier(0.16,1,0.3,1) ${i*0.04}s both">
+      <div class="resume-card-name">${escHtml(r.name || 'Untitled Resume')}</div>
+      <div class="resume-card-meta">${escHtml(r.title || 'No title')} · ${new Date(r.updatedAt).toLocaleDateString()}</div>
+      <button class="resume-card-del" onclick="deleteResume(event,'${r.id}')" title="Delete">✕</button>
+    </div>
+  `).join('');
+}
+
+function updateStats() {
+  document.getElementById('statCount').textContent = resumes.length;
+  const s = DB.stats(currentUser.id);
+  document.getElementById('statEdits').textContent = s.edits;
+}
+
+/* ─────────────── CRUD ─────────────── */
+function newResume() {
+  currentId = null;
+  clearForm();
+  document.getElementById('noSelectMsg').style.display = 'none';
+  document.getElementById('formContent').style.display = 'block';
+  document.getElementById('formTitle').textContent = 'New Resume';
+  document.getElementById('formSubtitle').textContent = 'Fill in your details below';
+  renderSidebar();
+  resetPreview();
+  document.getElementById('f_name').focus();
+}
+
+function selectResume(id) {
+  const r = resumes.find(x => x.id === id);
+  if (!r) return;
+  currentId = id;
+  loadForm(r);
+  document.getElementById('noSelectMsg').style.display = 'none';
+  document.getElementById('formContent').style.display = 'block';
+  document.getElementById('formTitle').textContent = 'Edit Resume';
+  document.getElementById('formSubtitle').textContent = `Last edited ${timeAgo(r.updatedAt)}`;
+  renderSidebar();
+  updatePreview();
+}
+
+function deleteResume(e, id) {
+  e.stopPropagation();
+  if (!confirm('Delete this resume? This cannot be undone.')) return;
+  resumes = resumes.filter(r => r.id !== id);
+  persist();
+  if (currentId === id) { currentId = null; clearForm(); resetPreview(); }
+  renderSidebar();
+  updateStats();
+  toast('Resume deleted', 'success');
+}
+
+function saveResume() {
+  const data = collectForm();
+  if (!data.name.trim()) { toast('Please enter your name.', 'error'); return; }
+
+  if (currentId) {
+    const idx = resumes.findIndex(r => r.id === currentId);
+    resumes[idx] = { ...resumes[idx], ...data, updatedAt: Date.now() };
+  } else {
+    const newR = { id: genId(), ...data, updatedAt: Date.now() };
+    resumes.unshift(newR);
+    currentId = newR.id;
+  }
+
+  persist();
+  DB.incrEdits(currentUser.id);
+  renderSidebar();
+  updatePreview();
+  updateStats();
+  updateScore(data);
+  document.getElementById('formSubtitle').textContent = 'Saved just now';
+  toast('✓ Resume saved!', 'success');
+}
+
+function persist() {
+  DB.saveResumes(currentUser.id, resumes);
+}
+
+/* ─────────────── FORM ─────────────── */
+function clearForm() {
+  ['f_name','f_title','f_email','f_phone','f_location','f_link','f_summary','f_skills'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('expList').innerHTML = '';
+  document.getElementById('eduList').innerHTML = '';
+  document.getElementById('aiSuggestionBox').innerHTML = '';
+  expCount = 0; eduCount = 0;
+  document.getElementById('noSelectMsg').style.display = 'flex';
+  document.getElementById('formContent').style.display = 'none';
+  document.getElementById('scoreLabel').textContent = '—';
+  document.getElementById('scoreDot').style.background = 'var(--muted)';
+}
+
+function addExp(data = {}) {
+  const id = 'exp_' + expCount++;
+  const html = `
+    <div class="dyn-item" id="${id}">
+      <button class="dyn-item-del" onclick="removeItem('${id}')">✕</button>
+      <label>Job Title</label>
+      <input type="text" value="${escAttr(data.role||'')}" placeholder="Software Engineer" oninput="updatePreview()">
+      <div class="field-row">
+        <div><label>Company</label><input type="text" value="${escAttr(data.company||'')}" placeholder="Acme Corp" oninput="updatePreview()"></div>
+        <div><label>Duration</label><input type="text" value="${escAttr(data.date||'')}" placeholder="2022 – Present" oninput="updatePreview()"></div>
+      </div>
+      <label>Key Achievements</label>
+      <textarea oninput="updatePreview()" placeholder="Led team of 5 engineers to ship new product in 3 months...">${escHtml(data.desc||'')}</textarea>
+    </div>`;
+  document.getElementById('expList').insertAdjacentHTML('beforeend', html);
+}
+
+function addEdu(data = {}) {
+  const id = 'edu_' + eduCount++;
+  const html = `
+    <div class="dyn-item" id="${id}">
+      <button class="dyn-item-del" onclick="removeItem('${id}')">✕</button>
+      <label>Degree</label>
+      <input type="text" value="${escAttr(data.degree||'')}" placeholder="B.Tech Computer Science" oninput="updatePreview()">
+      <div class="field-row">
+        <div><label>Institution</label><input type="text" value="${escAttr(data.school||'')}" placeholder="IIT Madras" oninput="updatePreview()"></div>
+        <div><label>Year</label><input type="text" value="${escAttr(data.year||'')}" placeholder="2018 – 2022" oninput="updatePreview()"></div>
+      </div>
+    </div>`;
+  document.getElementById('eduList').insertAdjacentHTML('beforeend', html);
+}
+
+function removeItem(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.style.transition = 'all 0.25s ease';
+  el.style.opacity = '0';
+  el.style.transform = 'translateX(-10px) scale(0.97)';
+  el.style.maxHeight = el.offsetHeight + 'px';
+  requestAnimationFrame(() => {
+    el.style.maxHeight = '0';
+    el.style.marginBottom = '0';
+    el.style.paddingTop = '0';
+    el.style.paddingBottom = '0';
+  });
+  setTimeout(() => { el.remove(); updatePreview(); }, 280);
+}
+
+function loadForm(r) {
+  ['name','title','email','phone','location','link','summary','skills'].forEach(k => {
+    const el = document.getElementById('f_' + k);
+    if (el) el.value = r[k] || '';
+  });
+  document.getElementById('expList').innerHTML = '';
+  document.getElementById('eduList').innerHTML = '';
+  expCount = 0; eduCount = 0;
+  (r.experiences || []).forEach(e => addExp(e));
+  (r.educations || []).forEach(e => addEdu(e));
+  document.getElementById('aiSuggestionBox').innerHTML = '';
+  updateScore(r);
+}
+
+function collectForm() {
+  const expItems = [...document.getElementById('expList').querySelectorAll('.dyn-item')].map(el => {
+    const inputs = el.querySelectorAll('input, textarea');
+    return { role: inputs[0].value, company: inputs[1].value, date: inputs[2].value, desc: inputs[3].value };
+  });
+  const eduItems = [...document.getElementById('eduList').querySelectorAll('.dyn-item')].map(el => {
+    const inputs = el.querySelectorAll('input');
+    return { degree: inputs[0].value, school: inputs[1].value, year: inputs[2].value };
+  });
+  return {
+    name: val('f_name'), title: val('f_title'), email: val('f_email'),
+    phone: val('f_phone'), location: val('f_location'), link: val('f_link'),
+    summary: val('f_summary'), skills: val('f_skills'),
+    experiences: expItems, educations: eduItems,
+  };
+}
+
+function val(id) { return document.getElementById(id)?.value || ''; }
+
+/* ─────────────── SCORE ─────────────── */
+function updateScore(data) {
+  let score = 0;
+  if (data.name) score += 15;
+  if (data.title) score += 10;
+  if (data.email) score += 10;
+  if (data.phone) score += 5;
+  if (data.location) score += 5;
+  if (data.link) score += 5;
+  if (data.summary && data.summary.length > 50) score += 20;
+  if ((data.experiences || []).length > 0) score += 15;
+  if ((data.educations || []).length > 0) score += 10;
+  if (data.skills) score += 5;
+
+  const dot = document.getElementById('scoreDot');
+  const label = document.getElementById('scoreLabel');
+  label.textContent = score + '%';
+  dot.style.background = score >= 80 ? 'var(--success)' : score >= 50 ? 'var(--gold)' : 'var(--danger)';
+}
+
+/* ─────────────── PREVIEW ─────────────── */
+function resetPreview() {
+  document.getElementById('previewSheet').innerHTML = `
+    <div class="empty-state">
+      <div class="empty-icon">📋</div>
+      <div style="font-weight:600;font-size:1rem;color:#aaa">Resume Preview</div>
+      <div style="font-size:0.83rem;color:#bbb;margin-top:0.4rem">Fill in the form and save to see your resume here.</div>
+    </div>`;
+}
+
+function updatePreview() {
+  const d = collectForm();
+  if (!d.name && !d.title && !d.email) { resetPreview(); return; }
+
+  const contact = [d.email, d.phone, d.location, d.link].filter(Boolean);
+
+  const expHtml = d.experiences.filter(e => e.role || e.company).map(e => `
+    <div class="r-exp-item">
+      <div class="r-exp-header">
+        <div class="r-exp-role">${escHtml(e.role)}</div>
+        <div class="r-exp-date">${escHtml(e.date)}</div>
+      </div>
+      <div class="r-exp-company">${escHtml(e.company)}</div>
+      <div class="r-exp-desc">${escHtml(e.desc).replace(/\n/g,'<br>')}</div>
+    </div>`).join('');
+
+  const eduHtml = d.educations.filter(e => e.degree || e.school).map(e => `
+    <div class="r-edu-item">
+      <div class="r-exp-header">
+        <div class="r-exp-role">${escHtml(e.degree)}</div>
+        <div class="r-exp-date">${escHtml(e.year)}</div>
+      </div>
+      <div class="r-exp-company">${escHtml(e.school)}</div>
+    </div>`).join('');
+
+  const skillTags = d.skills
+    ? d.skills.split(',').map(s=>s.trim()).filter(Boolean)
+        .map(s=>`<span class="r-skill-tag">${escHtml(s)}</span>`).join('')
+    : '';
+
+  const contactHtml = contact.map(c =>
+    `<span><div class="r-contact-dot"></div>${escHtml(c)}</span>`
+  ).join('');
+
+  document.getElementById('previewSheet').innerHTML = `
+    <div class="r-header">
+      <div class="r-name">${escHtml(d.name || 'Your Name')}</div>
+      ${d.title ? `<div class="r-title">${escHtml(d.title)}</div>` : ''}
+      <div class="r-contact">${contactHtml}</div>
+    </div>
+    ${d.summary ? `<div class="r-section-title">Summary</div><div class="r-summary">${escHtml(d.summary).replace(/\n/g,'<br>')}</div>` : ''}
+    ${expHtml ? `<div class="r-section-title">Experience</div>${expHtml}` : ''}
+    ${eduHtml ? `<div class="r-section-title">Education</div>${eduHtml}` : ''}
+    ${skillTags ? `<div class="r-section-title">Skills</div><div class="r-skills">${skillTags}</div>` : ''}
+  `;
+}
+
+// Live update on typing
+document.addEventListener('input', e => {
+  if (e.target.closest('#formContent')) updatePreview();
+});
+
+/* ─────────────── AI INTEGRATION ─────────────── */
+async function aiSuggestSummary() {
+  const name = val('f_name');
+  const title = val('f_title');
+  const skills = val('f_skills');
+  const existingSummary = val('f_summary');
+
+  if (!name && !title) {
+    toast('Add your name and title first.', 'error');
+    return;
+  }
+
+  const btn = document.getElementById('aiSummaryBtn');
+  btn.classList.add('ai-thinking');
+  btn.disabled = true;
+
+  const prompt = `You are a professional resume writer. Write a concise, impactful 2-3 sentence professional summary for a resume.
+  
+Person: ${name}
+Title: ${title}
+Skills: ${skills}
+${existingSummary ? `Existing summary to improve: ${existingSummary}` : ''}
+
+Write ONLY the summary text, no labels, no quotes, no extra text. Make it specific, achievement-focused, and compelling.`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const data = await resp.json();
+    const text = data.content?.map(c => c.text || '').join('') || '';
+
+    if (text) {
+      const box = document.getElementById('aiSuggestionBox');
+      box.innerHTML = `
+        <div class="ai-suggestion">
+          ${escHtml(text)}
+          <br><br>
+          <button onclick="applyAISuggestion(this)" data-text="${escAttr(text)}"
+            style="background:var(--gold);color:var(--ink);border:none;padding:0.3rem 0.8rem;border-radius:5px;font-family:Syne,sans-serif;font-size:0.75rem;font-weight:700;cursor:pointer;letter-spacing:0.04em;">
+            ↑ Use This
+          </button>
+        </div>`;
+    }
+  } catch(e) {
+    toast('AI unavailable — check your connection.', 'error');
+  }
+
+  btn.classList.remove('ai-thinking');
+  btn.disabled = false;
+}
+
+function applyAISuggestion(btn) {
+  const text = btn.getAttribute('data-text');
+  document.getElementById('f_summary').value = text;
+  document.getElementById('aiSuggestionBox').innerHTML = '';
+  updatePreview();
+  toast('✦ AI summary applied!', 'success');
+}
+
+/* ─────────────── UTILITIES ─────────────── */
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function escAttr(s) {
+  return String(s || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function timeAgo(ts) {
+  const s = Math.floor((Date.now() - ts) / 1000);
+  if (s < 60) return 'just now';
+  if (s < 3600) return Math.floor(s/60) + 'm ago';
+  if (s < 86400) return Math.floor(s/3600) + 'h ago';
+  return Math.floor(s/86400) + 'd ago';
+}
+
+function toast(msg, type = '') {
+  const t = document.createElement('div');
+  t.className = 'toast' + (type ? ' ' + type : '');
+  t.innerHTML = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2300);
+}
+</script>
+</body>
+</html>
